@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.sooki.entity.RoadMap;
 import com.sooki.events.VehicleBeginEvent;
 import com.sooki.events.VehicleEndEvent;
@@ -47,7 +48,7 @@ public class Vehicle  {
 		previous = null;
 		this.vehicleClock = vehicleClock;
 	//	this.rm  = RoadMap.getRoadMap();
-		this.calculateShortestPathNode(source,destination);
+		this.shortestPathNode = this.calculateShortestPathNode(source,destination);
 		this.next = getNextPostion();
 	}
 	
@@ -105,9 +106,11 @@ public class Vehicle  {
 		return shortestPathNode;
 	}
 	
-	public void calculateShortestPathNode(MyNode source,MyNode destination) {
+	public ArrayList<MyNode> calculateShortestPathNode(MyNode source,MyNode destination) {
 		// if current your destination, return 1;
 		shortestPathNode =  RoadMap.getRoadMap().findShortestPathNode(source, destination);
+		ArrayList<MyNode> arraylist = new ArrayList<MyNode>(shortestPathNode);
+		return arraylist;
 		
 	}
 	
@@ -202,7 +205,7 @@ public class Vehicle  {
 			
 				// Add to event queue new event
 			VehicleEndEvent v1 = new VehicleEndEvent(timeToSchedule, this);
-			this.calculateShortestPathNode(current,destination);
+			this.shortestPathNode = this.calculateShortestPathNode(current,destination);
 			
 			if(elh != null)
 			{
@@ -226,7 +229,8 @@ public class Vehicle  {
 	
 	public void nodeReached() {
 		previous = current;
-		current = this.next;
+		current = next;
+		System.out.println("Reached" + next);
 		EventListHolder elh = EventListHolder.getEventList();
 		VehicleBeginEvent v1 = new VehicleBeginEvent(this.vehicleClock, this);
 		elh.addEvent(v1);

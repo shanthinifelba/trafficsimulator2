@@ -122,7 +122,7 @@ public class Main {
 		
 		for(int i=0;i< 1;i++)
 		{
-			int timeForVehicle = 1;
+			int timeForVehicle = 0;
 			CreateEvent ce = new CreateEvent(0);
 			Random rn = new Random();
 			int Low = 50;
@@ -132,8 +132,8 @@ public class Main {
 			int des = rn.nextInt(destinNodes.size());
 			int start = rn.nextInt(listOfLocalPlaces.size());
 			
-			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(0), listOfLocalPlaces.get(3),timeForVehicle);
-			EventListHolder.getEventList().addEvent(new DrawEvent(1));
+			Vehicle v = new Vehicle(20, listOfLocalPlaces.get(0), listOfLocalPlaces.get(3),timeForVehicle);
+		//	EventListHolder.getEventList().addEvent(new DrawEvent(1));
 			VehicleListHolder.getVehicleListHolder().listOfVehicles.add(v);
 			
 			VehicleBeginEvent ve = new VehicleBeginEvent(timeForVehicle, v);

@@ -12,6 +12,8 @@ import java.util.Random;
 import processing.core.PApplet;
 
 import com.shanthini.visualization.Sketch;
+import com.shanthini.visualization.Visualisation;
+import com.shanthini.visualization.VisualisationA;
 import com.sooki.components.MyNode;
 import com.sooki.components.TrafficLight;
 import com.sooki.components.Vehicle;
@@ -47,6 +49,7 @@ public class Main {
 	static Properties prop = new Properties();
 	static InputStream input = null;
 	static String env = "prod";
+	@SuppressWarnings("restriction")
 	public static void main(String args[])
 	{
 		System.out.println(runName.toString());
@@ -110,30 +113,36 @@ public class Main {
 		
 	
 		System.out.println("StartedSimulating");
-	//	Sketch.main(new String[] { "com.shanthini.visualization.Sketch" });
+		//Sketch.main(new String[] { "com.shanthini.visualization.Sketch" });
+	
 		p.startProcessing();
 	//	while(start_simulation == false)
 		{
 			//do nothing
 		}
+	
+		//Visualisation.launch(Visualisation.class);
+		VisualisationA v2 = new VisualisationA();
+		
 		NOW = Instant.now();
 		System.out.println(listOfLocalPlaces.get(0));
-		System.out.println(listOfLocalPlaces.get(3));
-		
+		System.out.println(listOfLocalPlaces.get(15));
+	
 		for(int i=0;i< 1;i++)
 		{
-			int timeForVehicle = 0;
+			int timeForVehicle = i+2;
 			CreateEvent ce = new CreateEvent(0);
 			Random rn = new Random();
 			int Low = 50;
 			int High = 100;
 			int velocity = rn.nextInt(High-Low) + Low;
 			
-			int des = rn.nextInt(destinNodes.size());
-			int start = rn.nextInt(listOfLocalPlaces.size());
+			int des = rn.nextInt(listOfLocalPlaces.size()) ;
+			int start = rn.nextInt(listOfLocalPlaces.size()) ;
+			System.out.println("the numbers were" + des + " " + start);
 			
-			Vehicle v = new Vehicle(20, listOfLocalPlaces.get(0), listOfLocalPlaces.get(3),timeForVehicle);
-		//	EventListHolder.getEventList().addEvent(new DrawEvent(1));
+			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(start), listOfLocalPlaces.get(15),timeForVehicle);
+			
 			VehicleListHolder.getVehicleListHolder().listOfVehicles.add(v);
 			
 			VehicleBeginEvent ve = new VehicleBeginEvent(timeForVehicle, v);
@@ -142,7 +151,7 @@ public class Main {
 			elh.addEvent(ve);
 		
 		}
-		
+		EventListHolder.getEventList().addEvent(new DrawEvent(2));
 
 	
 		/*

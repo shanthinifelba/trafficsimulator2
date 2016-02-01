@@ -10,6 +10,7 @@ import com.sooki.events.VehicleBeginEvent;
 import com.sooki.events.VehicleEndEvent;
 import com.sooki.events.VehicleEvent;
 import com.sooki.simulator.EventListHolder;
+import com.sooki.simulator.VehicleListHolder;
 
 import edu.uci.ics.jung.graph.util.Pair;
 
@@ -49,6 +50,7 @@ public class Vehicle  {
 		this.vehicleClock = vehicleClock;
 	//	this.rm  = RoadMap.getRoadMap();
 		this.shortestPathNode = this.calculateShortestPathNode(source,destination);
+		
 		this.next = getNextPostion();
 	}
 	
@@ -118,16 +120,20 @@ public class Vehicle  {
 	{
 		//check which direction of car
 		// if sx coordinate are zero, the car moves in y
-		System.out.println(this.next);
+	
 		if(current.getX() - next.getX() == 0)
 		{
 			this.current_y = this.current_y + (next.getY() - current.getY())/this.timeToNextStop;
+			this.current_x = current.getX();
 			System.out.println("y" + this.current_y);
 		}
 		else if(current.getY() - next.getY() == 0)
 		{
-			this.current_x = this.current_x + (next.getX() - current.getX())/this.timeToNextStop;
-			System.out.println("x" + this.current_x);
+			//System.out.println("The starting position was" + this.current_x);
+			System.out.println("difference" +  this.id + " " + (next.getX() - current.getX()));
+			this.current_x = this.current_x +  (next.getX() - current.getX())/timeToNextStop;
+			this.current_y = current.getY();
+			System.out.println(this.id +" x " + this.current_x);
 		}
 	
 		
@@ -143,6 +149,7 @@ public class Vehicle  {
 		// if current your destination, return 1;
 		if (current.equals(destination) )
 		{
+			VehicleListHolder.getVehicleListHolder().listOfVehicles.remove(this);
 			System.out.println("Vehicle " + this.id + "reached destination");
 			return 1;
 		}
@@ -151,10 +158,12 @@ public class Vehicle  {
 			// the actual path of node
 			this.next = getNextPostion();
 			RoadSegment rs = RoadMap.getRoadMap().getAssociatedRoadSegement(current, this.next);
-			int currentLoad = rs.getCurrentLoad();
+			
+			int currentLoad = rs.getCurrentLoad(); 
+			System.out.println("The current load is" + currentLoad);
 			// since the load capactiy has reached more than of the capacity, change
 			ArrayList<RoadSegment> listOfAvailableRoad = new ArrayList<RoadSegment>();
-			if( currentLoad > rs.getCapacity()/2)
+			if( currentLoad > rs.getCapacity())
 			{ // the below logic is for re routing
 				ArrayList<MyNode> neighbhours =  RoadMap.getRoadMap().getListOfAssociatedNodes(current);
 				for(MyNode m : neighbhours )
@@ -168,14 +177,14 @@ public class Vehicle  {
 				
 				Collections.sort(listOfAvailableRoad, (RoadSegment rs1,RoadSegment rs2) -> {return rs1.getCurrentLoad() - rs2.getCurrentLoad(); }); 
 				RoadSegment least_used = listOfAvailableRoad.get(0);
-				if(least_used.getCurrentLoad() < rs.getCurrentLoad())
+				if(least_used.getCurrentLoad() > rs.getCurrentLoad())
 				{
 					least_used = rs;
 				}
 				else {
 					rs = least_used;
 				}
-				rs.incrementCurrentLoad();
+				
 				
 				Pair<MyNode> pp = RoadMap.getRoadMap().getNodeAssociatedWithEdge(rs);
 				if (pp.getFirst() == current )
@@ -185,6 +194,7 @@ public class Vehicle  {
 				}
 		
 			}
+			rs.incrementCurrentLoad();
 			
 			
 			
@@ -205,7 +215,7 @@ public class Vehicle  {
 			
 				// Add to event queue new event
 			VehicleEndEvent v1 = new VehicleEndEvent(timeToSchedule, this);
-			this.shortestPathNode = this.calculateShortestPathNode(current,destination);
+			this.shortestPathNode = this.calculateShortestPathNode(next,destination);
 			
 			if(elh != null)
 			{
@@ -228,9 +238,11 @@ public class Vehicle  {
 	}
 	
 	public void nodeReached() {
+		RoadSegment roadsegement = RoadMap.getRoadMap().getAssociatedRoadSegement(current, next);
+		roadsegement.decrementCurrentLoad();
 		previous = current;
 		current = next;
-		System.out.println("Reached" + next);
+		System.out.println(this.id + "Reached" + next);
 		EventListHolder elh = EventListHolder.getEventList();
 		VehicleBeginEvent v1 = new VehicleBeginEvent(this.vehicleClock, this);
 		elh.addEvent(v1);
@@ -252,8 +264,14 @@ public class Vehicle  {
 		for(MyNode n : shortestPathNode)
 			System.out.print(n.toString() + " ");
 		System.out.println();
-//		System.out.println(this.current.toString());
-		MyNode next = (MyNode) shortestPathNode.get(current_start+1);
+		System.out.println(this.current.toString());
+		if(shortestPathNode.size() > 1)
+		{
+		 next = (MyNode) shortestPathNode.get(current_start+1);
+		}
+		else {
+			next = current;
+		}
 		
 		return next;
 	}

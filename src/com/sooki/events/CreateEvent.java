@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.sooki.components.MyNode;
 import com.sooki.entity.RoadMap;
-import com.sooki.simulator.VehicleListHolder;
 
 
+ 
 public class CreateEvent extends IEvent{
 	
 	static int event= 0;

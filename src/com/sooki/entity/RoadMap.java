@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.sooki.components.MyNode;
 import com.sooki.components.MyPlaces;
 import com.sooki.components.RoadSegment;
+import com.sooki.components.Sensor;
 import com.sooki.components.TrafficLight;
 import com.sooki.helpers.MyColor;
 import com.sooki.helpers.RoughBase;
@@ -35,6 +36,7 @@ public class RoadMap {
 	private ArrayList<MyNode> listOfDestination;
 	private ArrayList<TrafficLight> listOfTrafficLight;
 	private ArrayList<MyNode> listOfLocalPlaces;
+	private ArrayList<Sensor> listOfSensor;
 	private RoughBase myTypes;
 	private RoadMap()
 	{
@@ -103,6 +105,7 @@ public class RoadMap {
         	listOfDestination = new ArrayList<MyNode>();
         	listOfTrafficLight = new ArrayList<TrafficLight>();
         	listOfLocalPlaces = new ArrayList<MyNode>();
+        	listOfSensor = new ArrayList<Sensor>();
     	Gson gson = new Gson();
     	try {
 		myTypes = gson.fromJson(new FileReader(Main.FileName), RoughBase.class);
@@ -161,6 +164,7 @@ public class RoadMap {
 			  MyNode source = listOfPlacesInMap.get( re.getSource() - 1);
 			  MyNode destination = listOfPlacesInMap.get(re.getTarget() - 1);
 			  network.addEdge(r1,source,destination,EdgeType.DIRECTED );
+			  listOfSensor.add(new Sensor(r1));
 		}
          
         } catch (Exception e) {
@@ -192,6 +196,11 @@ public class RoadMap {
     
     public ArrayList<MyNode> getListOfDestination(){
   		return listOfDestination;
+      	
+      }
+    
+    public ArrayList<Sensor> getListOfSensor(){
+  		return listOfSensor;
       	
       }
     

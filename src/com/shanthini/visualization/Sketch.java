@@ -30,31 +30,28 @@ public class Sketch extends PApplet {
 	private int DrawingSpaceHeight;
 	private int OffSetX = 20;
 	private int OffSetY = 20;
-	private int numberOfCars = 10; // number of cars;
+	
 	private ArrayList<RoughNodes> nodes = new ArrayList<>();
-	private boolean runonce = true;
-	private PVector location;
-	private PVector velocity;
+
 	ArrayList<MyNode> listOfPlaces;
 	
 	public void setup() {
 		
 		settings();
 		background(152);
-		DrawingSpaceWidth = width -OffSetX*2;
-		DrawingSpaceHeight = height - OffSetY*2;
+		DrawingSpaceWidth = 800 -OffSetX*2;
+		DrawingSpaceHeight = 800 - OffSetY*2;
 		
 		 
 		try {
-			Gson gson = new Gson();
-			
+						
 			RoughBase myTypes = RoadMap.getRoadMap().getRoughNodes();
 			//total number of nodes from json file
 			numberOfNodes = myTypes.nodes.size();
 			nodes = myTypes.nodes;
 			listOfPlaces = RoadMap.getRoadMap().getListOfLocalPlaces();
-			gridWidth = (int)((DrawingSpaceWidth)/Math.sqrt(numberOfNodes));
-			gridHeight = (int)((DrawingSpaceHeight)/Math.sqrt(numberOfNodes));
+			gridWidth = (int)((DrawingSpaceWidth)/(Math.sqrt(numberOfNodes)-1));
+			gridHeight = (int)((DrawingSpaceHeight)/(Math.sqrt(numberOfNodes)-1));
 			
 			System.out.println(myTypes.nodes.get(0).toString());
 			System.out.println(myTypes.edges.get(1).toString());
@@ -90,16 +87,14 @@ public class Sketch extends PApplet {
 			 }
 			 
 		 }
-		 
-		 
-		
+
 	}
 	
-
 	public void draw() {
 		
-		
-		drawBasicGrid(gridWidth,gridHeight); //draws the basic grid 
+		background(255,255,255);
+		 //draws the basic grid 
+		drawBasicGrid(gridWidth,gridHeight);
 		drawNodes(numberOfNodes);
 		CopyOnWriteArrayList<Vehicle> all_cars= VehicleListHolder.getVehicleListHolder().listOfVehicles;
 		drawCars(all_cars);
@@ -118,16 +113,20 @@ public class Sketch extends PApplet {
 	}
 	
 	public  void drawBasicGrid(int gridWidth,int gridHeight)
-	{
+	{	
+		 stroke(0,0,0); 
 		 int startX = 0,startY = 0;
-		 for (int i = 0; i < 5; i++) {
+		 for (int i = 0; i < 4; i++) {
 			   startX = i * gridWidth + OffSetX;
 			  line (startX, OffSetY, startX, DrawingSpaceHeight+OffSetY);
+			
 			  
 			}
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 4; i++) {
 			   startY = i * gridHeight + OffSetY;
+			//   System.out.println("Hello whats happening");
 			  line (OffSetX, startY, DrawingSpaceWidth+OffSetX, startY);
+			  
 			}
 			
 			
@@ -142,7 +141,7 @@ public class Sketch extends PApplet {
 	    {
 	    	
 	    	
-	    	int type = nodes.get(j).getType ();
+	    	int type = nodes.get(j).getType();
 	    	
 	    	int StartX = listOfPlaces.get(j).getX();
 	    	int StartY = listOfPlaces.get(j).getY();
@@ -150,13 +149,16 @@ public class Sketch extends PApplet {
 	         {
 	            case 0 :
 	            	//regular nodes
-			    	rect(StartX,StartY,25,25,7);
-			    	fill(255,223,11); //yellow
+	            	
+	            	fill(255,223,11);
+			    	rect(StartX-25/2,StartY-25/2,25,25,7);
+			     //yellow
 	               break;
 	            case 1 :
 	            	//traffic signal	
-		    		rect(StartX,StartY,25,25,7);
-		    		fill(51,51,255); //blue
+	            	fill(0,191,255);
+		    		rect(StartX-25/2,StartY-25/2,25,25,7);
+		    		//blue
 		               break;
 	            default:
 	            	System.out.println("Invalid node type");
@@ -174,9 +176,15 @@ public class Sketch extends PApplet {
 	
 		for(Vehicle v : all_cars )
 		{
-		noStroke();
-			fill(153,0,76);
-			ellipse(v.getCurrent_x(), v.getCurrent_y(), 15, 15);
+			  noStroke();
+			  fill(153,0,76);
+			 //   rect(v.getCurrent_x(), v.getCurrent_y(), 20, 10);
+			  //  ellipse(v.getCurrent_x()+5, v.getCurrent_y() +10, 5, 5);
+			  //  ellipse(v.getCurrent_x()+10, v.getCurrent_y()+10, 5, 5);
+			  ellipse(v.getCurrent_x(), v.getCurrent_y(), 10, 10);
+			  text(v.getId(), v.getCurrent_x()+10, v.getCurrent_y());
+			
+			
 		}	
 		
 	}

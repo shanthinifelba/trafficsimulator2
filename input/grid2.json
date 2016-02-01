@@ -120,7 +120,7 @@
       "target": 3,
       "source": 2,
       "directed": true,
-      "capacity": 0
+      "capacity": 3
     },
     {
       "length": 400,

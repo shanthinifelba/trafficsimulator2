@@ -42,7 +42,7 @@ public class MyProcess implements Runnable {
 					// exceu
 				}
 				currentTime.set(e.getTime());
-				System.out.println(e.getTime() +  ": " + e.getEventType() );
+			//	System.out.println(e.getTime() +  ": " + e.getEventType() );
 				eventListHolder.getProcessedEventQueue().add(e);
 				if(e instanceof VehicleEvent)
 				{
@@ -51,7 +51,13 @@ public class MyProcess implements Runnable {
 				}
 			
 				e.eventHandler();
-				
+				try{
+					Thread.sleep(200);
+					}
+					catch(Exception ex)
+					{
+						System.out.println(ex);
+					}
 			}
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block

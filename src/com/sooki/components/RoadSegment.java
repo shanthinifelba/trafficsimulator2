@@ -12,7 +12,7 @@ public class RoadSegment {
 	 this.id = edgeCount++; 
 	 this.length = length;
 	 this.capacity = capacity;
-	 this.currentLoad = 1;
+	 this.currentLoad = 0;
 	}
 	
 	public double getCapacity() {
@@ -50,6 +50,10 @@ public class RoadSegment {
 
 	public void incrementCurrentLoad() {
 		currentLoad = currentLoad + 1;
+	}
+	
+	public void decrementCurrentLoad() {
+		currentLoad = currentLoad - 1;
 	}
 	
 

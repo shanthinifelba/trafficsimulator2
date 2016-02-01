@@ -4,9 +4,12 @@ public class Sensor {
 	private int x;
 	private int y;
 	private RoadSegment rs;
+	private String name;
+	static int counter =1;
 	public Sensor(RoadSegment rs) {
 		// TODO Auto-generated constructor stub
 		this.rs = rs;
+		this.name = "Sensor" + counter++;				
 	}
 
 	public int getX() {
@@ -28,6 +31,11 @@ public class Sensor {
 
 	public void setRs(RoadSegment rs) {
 		this.rs = rs;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	

@@ -21,8 +21,8 @@ public class DrawEvent extends IEvent {
 		{
 			v.updateCarPosition();
 		}
-	//	DrawEvent de = new DrawEvent(this.time + 1);
-	//	EventListHolder.getEventList().addEvent(de);
+		DrawEvent de = new DrawEvent(this.time + 1);
+		EventListHolder.getEventList().addEvent(de);
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class MyProcess implements Runnable {
 					// exceu
 				}
 				currentTime.set(e.getTime());
-			//	System.out.println(e.getTime() +  ": " + e.getEventType() );
+				System.out.println(e.getTime() +  ": " + e.getEventType() );
 				eventListHolder.getProcessedEventQueue().add(e);
 				if(e instanceof VehicleEvent)
 				{
@@ -52,7 +52,7 @@ public class MyProcess implements Runnable {
 			
 				e.eventHandler();
 				try{
-					Thread.sleep(200);
+					Thread.sleep(50);
 					}
 					catch(Exception ex)
 					{

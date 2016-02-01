@@ -122,15 +122,15 @@ public class Main {
 		}
 	
 		//Visualisation.launch(Visualisation.class);
-		VisualisationA v2 = new VisualisationA();
+		new VisualisationA();
 		
 		NOW = Instant.now();
 		System.out.println(listOfLocalPlaces.get(0));
 		System.out.println(listOfLocalPlaces.get(15));
 	
-		for(int i=0;i< 1;i++)
+		for(int i=0;i< 30;i++)
 		{
-			int timeForVehicle = i+2;
+			int timeForVehicle = 0;
 			CreateEvent ce = new CreateEvent(0);
 			Random rn = new Random();
 			int Low = 50;
@@ -141,7 +141,7 @@ public class Main {
 			int start = rn.nextInt(listOfLocalPlaces.size()) ;
 			System.out.println("the numbers were" + des + " " + start);
 			
-			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(start), listOfLocalPlaces.get(15),timeForVehicle);
+			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(0), listOfLocalPlaces.get(15),timeForVehicle );
 			
 			VehicleListHolder.getVehicleListHolder().listOfVehicles.add(v);
 			

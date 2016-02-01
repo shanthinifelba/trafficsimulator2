@@ -225,7 +225,7 @@ public class VisualisationA extends JFrame
     				int StartX = sensor.getX();
     		    	int StartY = sensor.getY();
     		    	g.setColor(new Color(255, 154, 204));
-    				g.fillRect(StartX-sensorWidth/2,StartY-sensorLength/2,nodeWidth,nodeLength);
+    				g.fillOval(StartX-sensorWidth/2,StartY-sensorLength/2,nodeWidth,nodeLength);
     			}
   
     		
@@ -254,7 +254,7 @@ public class VisualisationA extends JFrame
     			{
     				  
     				  g.setColor(new Color(153, 0, 76));
-    				  System.out.println("executing draw cars");
+    				//  System.out.println("executing draw cars");
     				 //   rect(v.getCurrent_x(), v.getCurrent_y(), 20, 10);
     				  //  ellipse(v.getCurrent_x()+5, v.getCurrent_y() +10, 5, 5);
     				  //  ellipse(v.getCurrent_x()+10, v.getCurrent_y()+10, 5, 5);
@@ -270,15 +270,15 @@ public class VisualisationA extends JFrame
 			@Override
 			public void mousePressed(MouseEvent e) {
 				System.out.println("Mouse was clicked");
-				 Iterator iter = listOfPlaces.iterator();
+				 Iterator iter = sensors.iterator();
  	            System.out.println("getToolTipCalled");
  	            while ( iter.hasNext() ) {
- 	                MyNode c = (MyNode)iter.next();
+ 	                Sensor c = (Sensor)iter.next();
  	                Rectangle bounds = new Rectangle( c.getX() - nodeWidth/2,
  	                        c.getY()-nodeLength/2, nodeWidth, nodeLength);
  	                if ( bounds.contains( e.getPoint() ) ) {
  	                    System.out.println(c.getName());
- 	                    new Stats(c.getName());
+ 	                    new Stats(c);
  	                 
  	                }
  	            }
@@ -319,14 +319,14 @@ public class VisualisationA extends JFrame
 		private static final long serialVersionUID = 1L;
 		private String frameName;
     	
-    	public  Stats(String name) {
-    			frameName = name;
+    	public  Stats(Sensor s) {
+    			frameName = s.getName();
 		    	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-		    	StatsDrawing contentPane = new StatsDrawing();
+		    	StatsDrawing contentPane = new StatsDrawing(s);
             	getContentPane().add(contentPane);
             	
             	setSize(300, 300);
-            	setTitle(name);
+            	setTitle(frameName);
             	setVisible(true);
 		}
     	
@@ -364,13 +364,18 @@ public class VisualisationA extends JFrame
     
     private class StatsDrawing extends JPanel implements MouseListener {
 
-    	int x = 10;
-    	int y = 10;
-
+    
+    	Sensor s;
+    	public StatsDrawing(Sensor s){
+    	 this.s = s;
+     }
+    	
    	 protected void paintComponent(Graphics g) {
    		  super.paintComponent(g);       
    		 
-   		
+   		  g.drawString("CurrentLoad: " + s.getRs().getCurrentLoad(), 20, 20);
+   		  g.drawString ("Maximum Capacity: " + s.getRs().getCapacity(), 20,40);
+   		  g.drawString ("Maximum Velocity: " + s.getRs().getVelocity(), 20, 60);
    		  repaint();
    	 
    	 }

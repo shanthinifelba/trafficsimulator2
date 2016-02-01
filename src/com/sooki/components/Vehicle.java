@@ -195,7 +195,7 @@ public class Vehicle  {
 		
 			}
 			rs.incrementCurrentLoad();
-			
+			this.velocity = rs.getVelocity();
 			
 			
 			// check all other roads for traffic

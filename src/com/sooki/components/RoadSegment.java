@@ -13,7 +13,7 @@ public class RoadSegment {
 	 this.length = length;
 	 this.capacity = capacity;
 	 this.currentLoad = 0;
-	 this.velocity = 110;
+	 this.velocity = 100;
 	}
 	
 	public double getCapacity() {
@@ -72,9 +72,19 @@ public class RoadSegment {
 		return velocity;
 	}
 	public int decrementVelocity() {
-		velocity = velocity - (int) Math.pow(1.3, this.getCurrentLoad());
+		velocity = velocity - (int) this.getCurrentLoad();
+		if(velocity < 5)
+			velocity = 5;
 		return velocity ;
 	}
+	
+	public int incrementtVelocity() {
+		velocity = velocity +  (int) this.getCurrentLoad();
+		if(velocity > 100)
+			velocity = 100;
+		return velocity ;
+	}
+
 
 	public void setVelocity(int velocity) {
 		this.velocity = velocity;

@@ -14,7 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.ToolTipManager;
-import javax.swing.event.MouseInputListener;
+
 
 import com.sooki.components.MyNode;
 import com.sooki.components.RoadSegment;
@@ -224,7 +224,7 @@ public class VisualisationA extends JFrame
     			{
     				int StartX = sensor.getX();
     		    	int StartY = sensor.getY();
-    		    	g.setColor(new Color(255, 154, 204));
+    		    	g.setColor(new Color(102, 102, 153));
     				g.fillOval(StartX-sensorWidth/2,StartY-sensorLength/2,nodeWidth,nodeLength);
     			}
   

@@ -2,10 +2,13 @@ package com.sooki.simulator;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.jfree.ui.RefineryUtilities;
+
 import com.sooki.distributed.helper.Message;
 import com.sooki.events.IEvent;
 import com.sooki.events.VehicleEvent;
 import com.sooki.main.Main;
+import com.sooki.stats.DrawGraph;
 
 
 
@@ -36,23 +39,30 @@ public class MyProcess implements Runnable {
 			e = eventListHolder.getEventQueue().take();
 			if(e != null){
 				//check for recovery
+				System.out.println("time" + currentTime.get());
 				if(e.getTime() < currentTime.get())
 				{
 					System.out.println("need to recover");
 					// exceu
 				}
-				currentTime.set(e.getTime());
-				System.out.println(e.getTime() +  ": " + e.getEventType() );
-				eventListHolder.getProcessedEventQueue().add(e);
-				if(e instanceof VehicleEvent)
+				if(currentTime.get() > 2500)
 				{
-					Message me = new Message(e,Main.machine);
+					System.out.println("Test.");
+					break;
+					
+				}
+				currentTime.set(e.getTime());
+			//	System.out.println(e.getTime() +  ": " + e.getEventType() );
+				eventListHolder.getProcessedEventQueue().add(e);
+			//	if(e instanceof VehicleEvent)
+				{
+				//	Message me = new Message(e,Main.machine);
 				//	ElasticSearch.postToElasticQueue(me);
 				}
 			
 				e.eventHandler();
 				try{
-					Thread.sleep(50);
+					//Thread.sleep(50);
 					}
 					catch(Exception ex)
 					{
@@ -65,7 +75,8 @@ public class MyProcess implements Runnable {
 		}
 		
 	
-		}
+	}
+	
 		
 	}
 	

@@ -5,7 +5,11 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.sooki.components.MyNode;
+import com.sooki.components.Vehicle;
 import com.sooki.entity.RoadMap;
+import com.sooki.main.Main;
+import com.sooki.simulator.EventListHolder;
+import com.sooki.simulator.VehicleListHolder;
 
 
  
@@ -38,18 +42,29 @@ public class CreateEvent extends IEvent{
 		int velocity = r.nextInt(120);
 	//	CreateEvent ce = new CreateEvent(time);
 		int timeForVehicle = time + 1;
-		ArrayList<MyNode> destinNodes = RoadMap.getRoadMap().getListOfDestination();
+		ArrayList<MyNode> destinNodes = RoadMap.getRoadMap().getListOfLocalPlaces();
 		ArrayList<MyNode> localNodes = RoadMap.getRoadMap().getListOfLocalPlaces();
 		Random rn = new Random();
-		int des = rn.nextInt(destinNodes.size());
+		
+		int des = rn.nextInt(localNodes.size());
 		int start = rn.nextInt(localNodes.size());
-	//	Vehicle v = new Vehicle(velocity, localNodes.get(start), destinNodes.get(des),timeForVehicle);
+		
+	//	Vehicle v = new Vehicle(velocity, localNodes.get(start), destinNodes.get(des),timeForVehicle+1);
+		
 	//	VehicleListHolder.getVehicleListHolder().listOfVehicles.add(v);
-	//	VehicleEvent ve = new VehicleEvent(timeForVehicle, v);
-	//	EventListHolder elh = ProcessRoutingTable.getEntryEventListHolder(localNodes.get(start)); 
-	//	elh.addEvent(ce);
-	//	elh.addEvent(ve);
-		System.out.println("Create event handler called");
+		
+	//	CreateEvent ce = new CreateEvent(timeForVehicle+1);
+	//	VehicleEvent ve = new VehicleEvent(timeForVehicle+1, v);
+		
+		EventListHolder elh = EventListHolder.getEventList();
+		for(int i=0; i<Main.Generation_rate;i++)
+		{
+		//	elh.addEvent(ce);
+		//	elh.addEvent(ve);
+		}
+		
+		
+	//	System.out.println("Create event handler called");
 	}
 
 

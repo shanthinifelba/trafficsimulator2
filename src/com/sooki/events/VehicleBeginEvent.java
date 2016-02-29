@@ -48,7 +48,7 @@ public class VehicleBeginEvent extends IEvent {
 	public void toJson() {
 		  GsonBuilder builder = new GsonBuilder();
 	      Gson gson = builder.create();
-	      System.out.println(gson.toJson(this));
+	//     System.out.println(gson.toJson(this));
 	}
 	
 	public String getMessage() {

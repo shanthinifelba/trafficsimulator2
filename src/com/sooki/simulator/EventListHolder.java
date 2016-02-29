@@ -27,6 +27,14 @@ public class EventListHolder {
 		
 		return elh;
 	}
+	
+	public static EventListHolder ref() {
+
+		return elh = new EventListHolder();
+		
+		
+		
+	}
 
 	
 	public  void addEvent(IEvent e)

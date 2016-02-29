@@ -1,6 +1,6 @@
 package com.sooki.simulator;
 
-import java.util.ArrayList;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.sooki.components.Vehicle;

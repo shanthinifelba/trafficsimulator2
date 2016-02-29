@@ -9,6 +9,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.jfree.ui.RefineryUtilities;
+
 import processing.core.PApplet;
 
 import com.shanthini.visualization.Sketch;
@@ -23,11 +28,14 @@ import com.sooki.elasticsearch.ElasticSearch;
 import com.sooki.entity.RoadMap;
 import com.sooki.events.CreateEvent;
 import com.sooki.events.DrawEvent;
+import com.sooki.events.StopEvent;
 import com.sooki.events.VehicleBeginEvent;
 import com.sooki.events.VehicleEvent;
 import com.sooki.simulator.EventListHolder;
 import com.sooki.simulator.MyProcess;
 import com.sooki.simulator.VehicleListHolder;
+import com.sooki.stats.DrawGraph;
+import com.sooki.stats.StatsHolder;
 
 import java.time.Instant;
 
@@ -36,7 +44,7 @@ import java.time.Instant;
 public class Main {
 	
 	public static String machine = "machine1";
-	public static String FileName = "input/grid2.json";
+	public static String FileName = "input/Grids.json";
 	public static String  runName =  "sooki";
 	public static volatile boolean  start_simulation =  false;
 	public static String ELASTIC_SEARCH_IP;
@@ -49,6 +57,8 @@ public class Main {
 	static Properties prop = new Properties();
 	static InputStream input = null;
 	static String env = "prod";
+	public static int type = 1;
+	public static volatile int Generation_rate = 20;
 	@SuppressWarnings("restriction")
 	public static void main(String args[])
 	{
@@ -101,8 +111,7 @@ public class Main {
 		
 		ArrayList<MyNode> destinNodes = RoadMap.getRoadMap().getListOfDestination();
 		ArrayList<MyNode> listOfLocalPlaces = RoadMap.getRoadMap().getListOfLocalPlaces();
-		System.out.println(listOfLocalPlaces.get(1));
-		System.out.println( RoadMap.getRoadMap().getListOfAssociatedNodes(listOfLocalPlaces.get(1)));
+
 		
 		ElasticSearch.EstablishConnection();
 		//for(MyNode m : listOfLocalPlaces)
@@ -115,33 +124,32 @@ public class Main {
 		System.out.println("StartedSimulating");
 		//Sketch.main(new String[] { "com.shanthini.visualization.Sketch" });
 	
-		p.startProcessing();
+
 	//	while(start_simulation == false)
 		{
 			//do nothing
 		}
 	
 		//Visualisation.launch(Visualisation.class);
-		new VisualisationA();
+	//	new VisualisationA();
 		
 		NOW = Instant.now();
-		System.out.println(listOfLocalPlaces.get(0));
-		System.out.println(listOfLocalPlaces.get(15));
 	
-		for(int i=0;i< 30;i++)
+		p.startProcessing();
+		for(int i=0;i< 10000;i++)
 		{
-			int timeForVehicle = 0;
-			CreateEvent ce = new CreateEvent(0);
-			Random rn = new Random();
-			int Low = 50;
+			int timeForVehicle = i/Generation_rate;
+			CreateEvent ce = new CreateEvent(timeForVehicle);
+			Random rn = new Random(0);
+			int Low = 80;
 			int High = 100;
 			int velocity = rn.nextInt(High-Low) + Low;
 			
 			int des = rn.nextInt(listOfLocalPlaces.size()) ;
 			int start = rn.nextInt(listOfLocalPlaces.size()) ;
-			System.out.println("the numbers were" + des + " " + start);
+		//	System.out.println("the numbers were" + des + " " + start);
 			
-			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(0), listOfLocalPlaces.get(15),timeForVehicle );
+			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(start), listOfLocalPlaces.get(des),timeForVehicle );
 			
 			VehicleListHolder.getVehicleListHolder().listOfVehicles.add(v);
 			
@@ -149,11 +157,64 @@ public class Main {
 			
 			elh.addEvent(ce);
 			elh.addEvent(ve);
+			System.out.println("adding cars");
+		}
+		
+	
+		System.out.println("wait for user input 2");
+		Scanner sc = new Scanner(System.in);
+		sc.nextLine();
+		System.out.println("got user input");
+		type = 2;
+		System.out.println("type 2 is set, can i start second simulation");
+		sc.nextLine();
+		EventListHolder elh2 = EventListHolder.ref();
+		MyProcess p2 = new MyProcess(elh2); 
+		p2.startProcessing();
+		
+		for(int i=0;i< 10000;i++)
+		{
+			int timeForVehicle = i/Generation_rate;
+			CreateEvent ce = new CreateEvent(timeForVehicle);
+			Random rn = new Random(0);
+			int Low = 50;
+			int High = 100;
+			int velocity = rn.nextInt(High-Low) + Low;
+			
+			int des = rn.nextInt(listOfLocalPlaces.size()) ;
+			int start = rn.nextInt(listOfLocalPlaces.size()) ;
+		//	System.out.println("the numbers were" + des + " " + start);
+			
+			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(start), listOfLocalPlaces.get(des),timeForVehicle );
+			
+			VehicleListHolder.getVehicleListHolder().listOfVehicles.add(v);
+			
+			VehicleBeginEvent ve = new VehicleBeginEvent(timeForVehicle, v);
+			
+			elh2.addEvent(ce);
+			elh2.addEvent(ve);
 		
 		}
-		EventListHolder.getEventList().addEvent(new DrawEvent(2));
-
-	
+		System.out.println("Running next Simulation");
+		sc.nextLine();
+		
+		System.out.println("Going to draw graph");
+		final DrawGraph demo = new DrawGraph("Comparsion Sensor data input");
+	    demo.pack();
+	    RefineryUtilities.centerFrameOnScreen(demo);
+	     demo.setVisible(true);
+	        
+		System.out.println("Waiting for user input for graphs");
+		sc.nextLine();
+		
+		StopEvent stopEvent = new StopEvent(50000);
+		EventListHolder.getEventList().addEvent(stopEvent);
+		
+		System.out.println("Exited ");
+		sc.close();
+	//	EventListHolder.getEventList().addEvent(new DrawEvent(2));
+		System.out.println("The delay 1 is " + StatsHolder.getDelay1());
+		System.out.println("The delay 2 is " + StatsHolder.getDelay2());
 		/*
 		CreateEvent ce2 = new CreateEvent(2);
 		timeForVehicle = 25;

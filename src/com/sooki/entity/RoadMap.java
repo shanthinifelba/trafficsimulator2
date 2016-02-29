@@ -69,6 +69,8 @@ public class RoadMap {
 	
 	public List<MyNode>  findShortestPathNode(MyNode source, MyNode destination)
 	{
+		if(source == null || destination ==null )
+			System.out.println("Some went wrong");
 		List<RoadSegment> roadsegments  = alg.getPath(source, destination);
 		ArrayList<MyNode> listOfNodeInShortestPath = new ArrayList<MyNode>();
 		listOfNodeInShortestPath.add(source);

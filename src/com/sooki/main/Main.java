@@ -28,15 +28,11 @@ import com.sooki.elasticsearch.ElasticSearch;
 import com.sooki.entity.RoadMap;
 import com.sooki.events.CreateEvent;
 import com.sooki.events.DrawEvent;
-import com.sooki.events.StopEvent;
 import com.sooki.events.VehicleBeginEvent;
 import com.sooki.events.VehicleEvent;
 import com.sooki.simulator.EventListHolder;
 import com.sooki.simulator.MyProcess;
 import com.sooki.simulator.VehicleListHolder;
-import com.sooki.stats.DrawGraph;
-import com.sooki.stats.StatsHolder;
-
 import java.time.Instant;
 
 

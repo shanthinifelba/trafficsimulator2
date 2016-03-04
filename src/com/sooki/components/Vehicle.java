@@ -12,8 +12,6 @@ import com.sooki.events.VehicleEvent;
 import com.sooki.main.Main;
 import com.sooki.simulator.EventListHolder;
 import com.sooki.simulator.VehicleListHolder;
-import com.sooki.stats.StatsHolder;
-
 import edu.uci.ics.jung.graph.util.Pair;
 
 

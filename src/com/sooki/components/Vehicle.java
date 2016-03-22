@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.sooki.entity.RoadMap;
 import com.sooki.events.VehicleBeginEvent;
 import com.sooki.events.VehicleEndEvent;
-import com.sooki.events.VehicleEvent;
 import com.sooki.main.Main;
 import com.sooki.simulator.EventListHolder;
 import com.sooki.simulator.VehicleListHolder;
+import com.sooki.stats.StatsHolder;
+
 import edu.uci.ics.jung.graph.util.Pair;
 
 
@@ -155,10 +155,13 @@ public class Vehicle  {
 			{
 			StatsHolder.addToHashMap(this.vehicleClock);
 			StatsHolder.delay1(this.vehicleClock - this.startTime);
+			EventListHolder.getEventList().getAvgCalculator().average(this.vehicleClock - this.startTime);
+			
 			}
 			else {
 				StatsHolder.addToHashMap2(this.vehicleClock);
 				StatsHolder.delay2(this.vehicleClock - this.startTime);
+				EventListHolder.getEventList().getAvgCalculator().average(this.vehicleClock - this.startTime);
 			}
 			VehicleListHolder.getVehicleListHolder().listOfVehicles.remove(this);
 		//	System.out.println("Vehicle " + this.id + "reached destination");

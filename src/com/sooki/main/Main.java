@@ -6,34 +6,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.jfree.ui.RefineryUtilities;
 
-import processing.core.PApplet;
-
-import com.shanthini.visualization.Sketch;
-import com.shanthini.visualization.Visualisation;
-import com.shanthini.visualization.VisualisationA;
 import com.sooki.components.MyNode;
 import com.sooki.components.TrafficLight;
 import com.sooki.components.Vehicle;
-import com.sooki.distributed.rabbitmq.MessageConsumer;
-import com.sooki.distributed.rabbitmq.PushlishToExchange;
 import com.sooki.elasticsearch.ElasticSearch;
 import com.sooki.entity.RoadMap;
 import com.sooki.events.CreateEvent;
-import com.sooki.events.DrawEvent;
+import com.sooki.events.StopEvent;
 import com.sooki.events.VehicleBeginEvent;
-import com.sooki.events.VehicleEvent;
 import com.sooki.simulator.EventListHolder;
 import com.sooki.simulator.MyProcess;
 import com.sooki.simulator.VehicleListHolder;
-import java.time.Instant;
+import com.sooki.stats.DrawGraph;
+import com.sooki.stats.StatsHolder;
+
+import DrawGraph.DrawGraph2;
 
 
 
@@ -52,9 +47,9 @@ public class Main {
 	public static Instant NOW;
 	static Properties prop = new Properties();
 	static InputStream input = null;
-	static String env = "prod";
+	static String env = "test";
 	public static int type = 1;
-	public static volatile int Generation_rate = 20;
+	public static volatile int Generation_rate = 1;
 	@SuppressWarnings("restriction")
 	public static void main(String args[])
 	{
@@ -97,10 +92,9 @@ public class Main {
 	
 		ArrayList<TrafficLight> listOfTrafficLights = RoadMap.getRoadMap().getlistOfTrafficLight();
 	
-		EventListHolder elh = EventListHolder.getEventList();
-		MyProcess p = new MyProcess(elh); 
-	//	PushlishToExchange.connectRabbitMQ();
-	//	MessageConsumer.creatMessageConsumer(elh);
+	
+	PushlishToExchange.connectRabbitMQ();
+	MessageConsumer.creatMessageConsumer(elh);
 		
 	
 		
@@ -130,10 +124,22 @@ public class Main {
 	//	new VisualisationA();
 		
 		NOW = Instant.now();
-	
-		p.startProcessing();
-		for(int i=0;i< 10000;i++)
+		Scanner sc = new Scanner(System.in);
+		for(int k =0; k < 24 ;k++ )
 		{
+			
+			if (k % 2 == 0)
+			{	Generation_rate = k +1;
+				Main.type = 1;
+			}
+			else 
+				Main.type = 2;
+			EventListHolder elh = EventListHolder.ref(true);
+			MyProcess p = new MyProcess(elh); 
+			p.startProcessing();
+		for(int i=0;i< 1000;i++)
+		{
+			
 			int timeForVehicle = i/Generation_rate;
 			CreateEvent ce = new CreateEvent(timeForVehicle);
 			Random rn = new Random(0);
@@ -143,6 +149,8 @@ public class Main {
 			
 			int des = rn.nextInt(listOfLocalPlaces.size()) ;
 			int start = rn.nextInt(listOfLocalPlaces.size()) ;
+		//	 des = listOfLocalPlaces.size() -1 ;
+		//	 start =0 ;
 		//	System.out.println("the numbers were" + des + " " + start);
 			
 			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(start), listOfLocalPlaces.get(des),timeForVehicle );
@@ -154,51 +162,23 @@ public class Main {
 			elh.addEvent(ce);
 			elh.addEvent(ve);
 			System.out.println("adding cars");
+			
 		}
-		
-	
-		System.out.println("wait for user input 2");
-		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter to run next run");
 		sc.nextLine();
-		System.out.println("got user input");
-		type = 2;
-		System.out.println("type 2 is set, can i start second simulation");
-		sc.nextLine();
-		EventListHolder elh2 = EventListHolder.ref();
-		MyProcess p2 = new MyProcess(elh2); 
-		p2.startProcessing();
-		
-		for(int i=0;i< 10000;i++)
-		{
-			int timeForVehicle = i/Generation_rate;
-			CreateEvent ce = new CreateEvent(timeForVehicle);
-			Random rn = new Random(0);
-			int Low = 50;
-			int High = 100;
-			int velocity = rn.nextInt(High-Low) + Low;
-			
-			int des = rn.nextInt(listOfLocalPlaces.size()) ;
-			int start = rn.nextInt(listOfLocalPlaces.size()) ;
-		//	System.out.println("the numbers were" + des + " " + start);
-			
-			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(start), listOfLocalPlaces.get(des),timeForVehicle );
-			
-			VehicleListHolder.getVehicleListHolder().listOfVehicles.add(v);
-			
-			VehicleBeginEvent ve = new VehicleBeginEvent(timeForVehicle, v);
-			
-			elh2.addEvent(ce);
-			elh2.addEvent(ve);
-		
 		}
-		System.out.println("Running next Simulation");
-		sc.nextLine();
+
 		
 		System.out.println("Going to draw graph");
-		final DrawGraph demo = new DrawGraph("Comparsion Sensor data input");
+		/*final DrawGraph demo = new DrawGraph("Comparsion Sensor data input");
 	    demo.pack();
 	    RefineryUtilities.centerFrameOnScreen(demo);
 	     demo.setVisible(true);
+	     */
+	 	final DrawGraph2 demo2 = new DrawGraph2("Average delay");
+	    demo2.pack();
+	    RefineryUtilities.centerFrameOnScreen(demo2);
+	    demo2.setVisible(true);
 	        
 		System.out.println("Waiting for user input for graphs");
 		sc.nextLine();

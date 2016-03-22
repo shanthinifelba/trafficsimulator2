@@ -6,8 +6,13 @@ import java.util.TreeMap;
 public class StatsHolder {
 	static TreeMap<Integer, Integer> hp = new TreeMap<Integer,Integer>();
 	static TreeMap<Integer, Integer> hp2 = new TreeMap<Integer,Integer>();
+	public static TreeMap<Integer, Double> withSensorAverage = new TreeMap<Integer,Double>();
+	public static TreeMap<Integer, Double> withOutSensorAverage = new TreeMap<Integer,Double>();
+
 	static double delay1 = 0;
 	static double delay2 = 0;
+	static int counter_for_run = 0;
+	static double average = 0;
 	public static void addToHashMap(int time)
 	{
 		if( hp.get(time) == null )
@@ -36,6 +41,24 @@ public class StatsHolder {
 		}
 	}
 	
+	public static void addToHashMapAverage(Double avg)
+	{
+		if( withSensorAverage.get(counter_for_run) == null )
+		{
+			withSensorAverage.put(counter_for_run, avg);
+		}
+	}
+	
+	public static void addToHashMapAverage2(Double avg)
+	{
+		if( withOutSensorAverage.get(counter_for_run) == null )
+		{
+			withOutSensorAverage.put(counter_for_run, avg);
+		}
+		counter_for_run++;
+	}
+	
+	
 	public static void delay1(double val)
 	{
 		delay1= delay1 + val;
@@ -55,7 +78,5 @@ public class StatsHolder {
 	{
 		return delay2;
 	}
-	
-	
 
 }

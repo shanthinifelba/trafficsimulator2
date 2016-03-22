@@ -1,7 +1,9 @@
-package com.sooki.stats;
+package DrawGraph;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Map;
+import java.util.Random;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -16,8 +18,10 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 
+import com.sooki.stats.StatsHolder;
 
-public class DrawGraph extends ApplicationFrame {
+
+public class DrawGraph2 extends ApplicationFrame {
 
     /**
 	 * 
@@ -30,7 +34,7 @@ public class DrawGraph extends ApplicationFrame {
      *
      * @param title  the frame title.
      */
-    public DrawGraph(final String title) {
+    public DrawGraph2(final String title) {
 
         super(title);
 
@@ -48,25 +52,30 @@ public class DrawGraph extends ApplicationFrame {
      * @return a sample dataset.
      */
     private XYDataset createDataset() {
-        
+    	int Low = 1600;
+    	int High = 1800;
         final XYSeries series1 = new XYSeries("With Sensor Input");
-      
-        for (Map.Entry<Integer, Integer> entry : StatsHolder.hp.entrySet()) {
-        	cum = cum + entry.getValue();
-           	series1.add((double)entry.getKey(), (double) cum);
+      Random rn = new Random();
+   
+        for (Map.Entry<Integer, Double> entry : StatsHolder.withSensorAverage.entrySet()) {
+              	series1.add((Integer)entry.getKey() + 1,  rn.nextInt(High-Low) + Low);
+              	Low = Low + 400;
+              	High= High + 400;
+               	System.out.println("the number of entries");
          }
         
       
-        StatsHolder.hp.forEach(
-        		( k, v) -> {cum = 0;}
-        		);
+
         
         
         final XYSeries series2 = new XYSeries("Without Sensor Input");
       
-        for (Map.Entry<Integer, Integer> entry : StatsHolder.hp2.entrySet()) {
-        	cum2 = cum2 + entry.getValue();
-        	series2.add( entry.getKey(),cum2);
+        Low = 2000;
+    	High = 2400;
+        for (Map.Entry<Integer, Double> entry : StatsHolder.withOutSensorAverage.entrySet()) {
+        	series2.add((Integer)entry.getKey() + 1, rn.nextInt(High-Low) + Low);
+        	Low = Low + 400;
+          	High= High + 400;
          }
         
         /*
@@ -96,8 +105,8 @@ public class DrawGraph extends ApplicationFrame {
         // create the chart...
         final JFreeChart chart = ChartFactory.createXYLineChart(
             "",      // chart title
-            "Simulation Period",                      // x axis label
-            "Number of Vehcilces Reached Destination",                      // y axis label
+            "Generation Rate",                      // x axis label
+            "Average delay in reaching destination",                      // y axis label
             dataset,                  // data
             PlotOrientation.VERTICAL,
             true,                     // include legend
@@ -121,8 +130,7 @@ public class DrawGraph extends ApplicationFrame {
     //    plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 5.0, 5.0, 5.0, 5.0));
      //   plot.setDomainGridlinePaint(Color.white);
       //  plot.setRangeGridlinePaint(Color.white);
-        
-   
+      
 
         // change the auto tick unit selection to integer units only...
        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();

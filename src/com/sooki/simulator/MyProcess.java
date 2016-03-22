@@ -5,25 +5,32 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.jfree.ui.RefineryUtilities;
 
 import com.sooki.distributed.helper.Message;
+import com.sooki.elasticsearch.ElasticSearch;
 import com.sooki.events.IEvent;
+import com.sooki.events.VehicleBeginEvent;
+import com.sooki.events.VehicleEndEvent;
 import com.sooki.events.VehicleEvent;
 import com.sooki.main.Main;
+import com.sooki.stats.AverageCaluclator;
+import com.sooki.stats.StatsHolder;
 
 
 
 public class MyProcess implements Runnable {
 	AtomicInteger currentTime;
 	private EventListHolder eventListHolder; 
-	static int counter;
+	
 	static volatile boolean ShouldRun = true;
 	public MyProcess(EventListHolder elh) {
 		eventListHolder = elh;
 		currentTime = new AtomicInteger();
+		
 	}
 	
-	public void startProcessing() {
+	public Thread startProcessing() {
 		Thread t = new Thread(this);
 		t.start();
+		return t;
 	}
 
 	@Override
@@ -44,8 +51,15 @@ public class MyProcess implements Runnable {
 					System.out.println("need to recover");
 					// exceu
 				}
-				if(currentTime.get() > 2500)
+				if(currentTime.get() > 1800)
 				{
+					if(Main.type == 1)
+					{
+					StatsHolder.addToHashMapAverage(eventListHolder.getAvgCalculator().getaverage());
+					}
+					else {
+						StatsHolder.addToHashMapAverage2(eventListHolder.getAvgCalculator().getaverage());
+					}
 					System.out.println("Test.");
 					break;
 					
@@ -53,9 +67,9 @@ public class MyProcess implements Runnable {
 				currentTime.set(e.getTime());
 			//	System.out.println(e.getTime() +  ": " + e.getEventType() );
 				eventListHolder.getProcessedEventQueue().add(e);
-			//	if(e instanceof VehicleEvent)
+				if(e instanceof VehicleBeginEvent || e instanceof VehicleEndEvent)
 				{
-				//	Message me = new Message(e,Main.machine);
+					Message me = new Message(e,Main.machine);
 				//	ElasticSearch.postToElasticQueue(me);
 				}
 			
@@ -95,6 +109,8 @@ public class MyProcess implements Runnable {
 	public EventListHolder getEventListHolder() {
 		return eventListHolder;
 	}
+	
+	
 
 	public void setEventListHolder(EventListHolder eventListHolder) {
 		this.eventListHolder = eventListHolder;

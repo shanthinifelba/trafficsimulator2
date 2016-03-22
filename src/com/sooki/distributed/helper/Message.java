@@ -17,7 +17,7 @@ public class Message {
 		this.event = event;
 		this.uuid = UUID.randomUUID();
 		this.machine = machine;
-		this.time_elapsed = Duration.between(Main.NOW,Instant.now()).toMillis()/1000;
+//		this.time_elapsed = Duration.between(Main.NOW,Instant.now()).toMillis()/1000;
 	}
 	
 

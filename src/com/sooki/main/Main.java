@@ -17,6 +17,8 @@ import org.jfree.ui.RefineryUtilities;
 import com.sooki.components.MyNode;
 import com.sooki.components.TrafficLight;
 import com.sooki.components.Vehicle;
+import com.sooki.distributed.rabbitmq.MessageConsumer;
+import com.sooki.distributed.rabbitmq.PushlishToExchange;
 import com.sooki.elasticsearch.ElasticSearch;
 import com.sooki.entity.RoadMap;
 import com.sooki.events.CreateEvent;
@@ -93,8 +95,8 @@ public class Main {
 		ArrayList<TrafficLight> listOfTrafficLights = RoadMap.getRoadMap().getlistOfTrafficLight();
 	
 	
-	PushlishToExchange.connectRabbitMQ();
-	MessageConsumer.creatMessageConsumer(elh);
+	//PushlishToExchange.connectRabbitMQ();
+	//MessageConsumer.creatMessageConsumer(elh);
 		
 	
 		

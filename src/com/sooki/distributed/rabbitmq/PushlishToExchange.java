@@ -55,7 +55,7 @@ public class PushlishToExchange {
 	public static void sendStorageEvent(VehicleEvent v) 
 	{
 		 try {
-		//	channel.basicPublish(EXCHANGE_NAME, "elasticsearch", null,  gson.toJson(v).getBytes("UTF-8"));
+		//channel.basicPublish(EXCHANGE_NAME, "elasticsearch", null,  gson.toJson(v).getBytes("UTF-8"));
 			 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

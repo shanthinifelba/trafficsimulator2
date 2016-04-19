@@ -38,10 +38,17 @@ public class RoadMap {
 	private ArrayList<MyNode> listOfLocalPlaces;
 	private ArrayList<Sensor> listOfSensor;
 	private RoughBase myTypes;
+	
+	
+	
 	private RoadMap()
 	{
 		network = getRoadMapNetwork();
 	}
+	
+	
+	
+	
 	public static RoadMap getRoadMap()
 	{
 		if( r == null)
@@ -50,13 +57,16 @@ public class RoadMap {
 		}
 		return r;
 	}
+	
+	
+	
 	private DirectedGraph<MyNode, RoadSegment> getRoadMapNetwork()
 	{	
 		if(network == null)
 		{
 			network =  createSimpleGraph();
 		}
-		
+		  
 		return network;
 	}
 	

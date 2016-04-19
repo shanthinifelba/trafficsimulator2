@@ -13,7 +13,7 @@ import io.searchbox.core.Index;
 
 
 public class ElasticSearch {
-	private static JestClientFactory factory;
+	private static JestClientFactory factory; /*using JEST API to talk with Elastic search java API */
 	private static  JestClient client;
 	private static final String INDEX_NAME_VEHCILE = Main.INDEX_NAME;
 	private static final String ELASTIC_SEARCH_IP = Main.ELASTIC_SEARCH_IP;
@@ -33,7 +33,7 @@ public class ElasticSearch {
 	
 	
 	
-	public static void postToElasticQueue(Message me) {
+	public static void postToElasticQueue(Message  me) {
 		
 		 Index index = new Index.Builder(me).index(INDEX_NAME_VEHCILE).type(Main.runName).build();
 		 System.out.println("executing");

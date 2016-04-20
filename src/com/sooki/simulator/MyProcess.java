@@ -2,16 +2,16 @@ package com.sooki.simulator;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jfree.ui.RefineryUtilities;
+
 
 import com.sooki.distributed.helper.Message;
-import com.sooki.elasticsearch.ElasticSearch;
+
 import com.sooki.events.IEvent;
 import com.sooki.events.VehicleBeginEvent;
 import com.sooki.events.VehicleEndEvent;
-import com.sooki.events.VehicleEvent;
+
 import com.sooki.main.Main;
-import com.sooki.stats.AverageCalculator;
+
 import com.sooki.stats.StatsHolder;
 
 
@@ -60,17 +60,17 @@ public class MyProcess implements Runnable {
 					else {
 						StatsHolder.addToHashMapAverage2(eventListHolder.getAvgCalculator().getaverage());
 					}
-					System.out.println("Test.");
+					//System.out.println("Test.");
 					break;
 					
 				}
 				currentTime.set(e.getTime());
-			//	System.out.println(e.getTime() +  ": " + e.getEventType() );
+				System.out.println(e.getTime() +  ": " + e.getEventType() );
 				eventListHolder.getProcessedEventQueue().add(e);
 				if(e instanceof VehicleBeginEvent || e instanceof VehicleEndEvent)
 				{
 					Message me = new Message(e,Main.machine);
-				//	ElasticSearch.postToElasticQueue(me);
+					//ElasticSearch.postToElasticQueue(me);
 				}
 			
 				e.eventHandler();

@@ -17,7 +17,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 
 public class Vehicle  {
 	static int currentId =0;
-	private int id;
+	public int id;
 	private float velocity;
 	private MyNode source;
 	private MyNode previous;
@@ -29,6 +29,7 @@ public class Vehicle  {
 	private int startTime;
 	private int timeToNextStop;
 	private int vehicleClock;
+	private double initialRemainingEnergy;
 	private double currentRemainingEnergy;
 	volatile float current_x;
 	volatile float current_y;
@@ -46,7 +47,7 @@ public class Vehicle  {
 		this.source = source;
 		this.destination = destination;
 		this.current = source;
-		this.setCurrentRemainingEnergy(energy);
+		this.setInitialRemainingEnergy(energy);
 		this.current_x = source.getX();
 		this.current_y = source.getY();
 		this.timeToNextStop = 1000;
@@ -111,11 +112,19 @@ public class Vehicle  {
 	public List<MyNode> getShortestPathNode() {
 		return shortestPathNode;
 	}
-	public double calculateCurrentEnergy(int id) {
-		double energy = this.getVelocity()*120;
-		System.out.println(energy);
-		// TODO Auto-generated method stub
-		return energy;
+	public void decrementEnergy() {
+		if(this.getInitialRemainingEnergy()>0 || (this.getCurrentRemainingEnergy()>this.getInitialRemainingEnergy())){
+			this.setCurrentRemainingEnergy(currentRemainingEnergy/2);
+		}
+
+		
+
+	}
+	public void updateEnergy() {
+		
+		this.setCurrentRemainingEnergy(this.getCurrentRemainingEnergy());
+		System.out.println("Remaining enerygy"+" "+ this.getId()+ " "+ this.getCurrentRemainingEnergy());
+
 	}
 	public ArrayList<MyNode> calculateShortestPathNode(MyNode source,MyNode destination) {
 		// if current your destination, return 1;
@@ -312,6 +321,12 @@ public class Vehicle  {
 	}
 	public void setCurrentRemainingEnergy(double currentRemainingEnergy) {
 		this.currentRemainingEnergy = currentRemainingEnergy;
+	}
+	public double getInitialRemainingEnergy() {
+		return initialRemainingEnergy;
+	}
+	public void setInitialRemainingEnergy(double initialRemainingEnergy) {
+		this.initialRemainingEnergy = initialRemainingEnergy;
 	}
 	
 	

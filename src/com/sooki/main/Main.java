@@ -133,16 +133,17 @@ public class Main {
 			
 			if (k % 2 == 0)
 			{	Generation_rate = k +1;
-				Main.type = 1;
+				Main.type = 1; //without sensor
 			}
 			else 
-				Main.type = 2;
+				Main.type = 2; //with sensor
 			EventListHolder elh = EventListHolder.ref(true);
 			MyProcess p = new MyProcess(elh); 
 			p.startProcessing();
-		for(int i=0;i< 100;i++)
+			
+		for(int i=0;i< 10;i++)
 		{
-			double energyAvailable = 8.0;
+			double energyAvailable = 800.0;
 			int timeForVehicle = i/Generation_rate;
 			CreateEvent ce = new CreateEvent(timeForVehicle);
 			Random rn = new Random(0);
@@ -162,10 +163,12 @@ public class Main {
 			
 			VehicleBeginEvent ve = new VehicleBeginEvent(timeForVehicle, v);
 			
+			
 			//elh.addEvent(ce);
 			elh.addEvent(ve);
-			System.out.println("adding cars with full energy capacity");
-			System.out.println("Vehicle Capacity"+v.getId()+":"+v.getCurrentRemainingEnergy());
+			
+		//	System.out.println("adding cars with full energy capacity");
+			System.out.println("Vehicle Capacity"+v.getId()+":"+v.getInitialRemainingEnergy());
 			
 		}
 		System.out.println("Enter to run next run");

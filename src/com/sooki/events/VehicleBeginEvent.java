@@ -26,6 +26,7 @@ public class VehicleBeginEvent extends IEvent {
 		// TODO Auto-generated method stub
 		this.toJson();
 		v.beginEvent();
+		v.decrementEnergy();
 	
 		
 	}

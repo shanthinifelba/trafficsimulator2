@@ -1,4 +1,4 @@
-package com.sooki.components;
+   package com.sooki.components;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +29,7 @@ public class Vehicle  {
 	private int startTime;
 	private int timeToNextStop;
 	private int vehicleClock;
+	private double currentRemainingEnergy;
 	volatile float current_x;
 	volatile float current_y;
 	//public RoadMap rm;
@@ -37,7 +38,7 @@ public class Vehicle  {
 	{
 		
 	}
-	public Vehicle(int velocity,MyNode source,MyNode destination,int vehicleClock)
+	public Vehicle(int velocity,MyNode source,MyNode destination,int vehicleClock, double energy)
 	{
 		this.startTime = vehicleClock;
 		this.id = currentId++;
@@ -45,6 +46,7 @@ public class Vehicle  {
 		this.source = source;
 		this.destination = destination;
 		this.current = source;
+		this.setCurrentRemainingEnergy(energy);
 		this.current_x = source.getX();
 		this.current_y = source.getY();
 		this.timeToNextStop = 1000;
@@ -109,7 +111,12 @@ public class Vehicle  {
 	public List<MyNode> getShortestPathNode() {
 		return shortestPathNode;
 	}
-	
+	public double calculateCurrentEnergy(int id) {
+		double energy = this.getVelocity()*120;
+		System.out.println(energy);
+		// TODO Auto-generated method stub
+		return energy;
+	}
 	public ArrayList<MyNode> calculateShortestPathNode(MyNode source,MyNode destination) {
 		// if current your destination, return 1;
 		shortestPathNode =  RoadMap.getRoadMap().findShortestPathNode(source, destination);
@@ -299,6 +306,12 @@ public class Vehicle  {
 	public void beginEvent() {
 		// TODO Auto-generated method stub
 		this.futureEvent();
+	}
+	public double getCurrentRemainingEnergy() {
+		return currentRemainingEnergy;
+	}
+	public void setCurrentRemainingEnergy(double currentRemainingEnergy) {
+		this.currentRemainingEnergy = currentRemainingEnergy;
 	}
 	
 	

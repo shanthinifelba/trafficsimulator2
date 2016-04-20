@@ -1,4 +1,4 @@
-package com.sooki.events;
+ package com.sooki.events;
 
 public abstract class IEvent implements Comparable<IEvent> {
 

@@ -3,7 +3,7 @@ package com.sooki.simulator;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import com.sooki.events.IEvent;
-import com.sooki.stats.AverageCaluclator;
+import com.sooki.stats.AverageCalculator;
 
 
 
@@ -15,12 +15,12 @@ public class EventListHolder {
 	private PriorityBlockingQueue<IEvent> outGoingList;
 	private static EventListHolder elh;
 	private boolean withSensor = false;
-	private AverageCaluclator avg; 
+	private AverageCalculator avg; 
 		private EventListHolder (boolean withSensor) {
 		pendingEvenList= new PriorityBlockingQueue<>();
 		processedEvenList = new PriorityBlockingQueue<IEvent>();
 		outGoingList = new PriorityBlockingQueue<IEvent>();
-		avg = new AverageCaluclator();
+		avg = new AverageCalculator();
 		this.withSensor = withSensor;
 	}
 	
@@ -68,7 +68,7 @@ public class EventListHolder {
 		return outGoingList;
 	}
 	
-	public AverageCaluclator getAvgCalculator() {
+	public AverageCalculator getAvgCalculator() {
 		return avg;
 	}
 

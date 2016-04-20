@@ -11,7 +11,7 @@ import com.sooki.events.VehicleBeginEvent;
 import com.sooki.events.VehicleEndEvent;
 import com.sooki.events.VehicleEvent;
 import com.sooki.main.Main;
-import com.sooki.stats.AverageCaluclator;
+import com.sooki.stats.AverageCalculator;
 import com.sooki.stats.StatsHolder;
 
 

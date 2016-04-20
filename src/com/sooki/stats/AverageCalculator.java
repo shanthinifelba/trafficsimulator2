@@ -1,6 +1,6 @@
 package com.sooki.stats;
 
-public class AverageCaluclator {
+public class AverageCalculator {
 	static int counter = 0;
 	double average = 0;
 	

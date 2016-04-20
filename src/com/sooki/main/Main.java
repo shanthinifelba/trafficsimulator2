@@ -22,6 +22,7 @@ import com.sooki.distributed.rabbitmq.PushlishToExchange;
 import com.sooki.elasticsearch.ElasticSearch;
 import com.sooki.entity.RoadMap;
 import com.sooki.events.CreateEvent;
+import com.sooki.events.DrawEvent;
 import com.sooki.events.StopEvent;
 import com.sooki.events.VehicleBeginEvent;
 import com.sooki.simulator.EventListHolder;
@@ -62,7 +63,7 @@ public class Main {
 			writer.println(runName);
 			writer.close();
 			input = new FileInputStream("config.properties");
-			prop.load(input);
+			prop.load(input); // load a properties file
 			ELASTIC_SEARCH_IP = prop.getProperty(env + ".elasticsearch.ip");
 			RABBIT_MQ_IP = prop.getProperty(env + ".rabbitmq.ip");
 			INDEX_NAME =  prop.getProperty(env + ".elasticsearch.indexname");	
@@ -86,7 +87,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// load a properties file
+		
 	
 
 		// get the property value and print it out
@@ -127,7 +128,7 @@ public class Main {
 		
 		NOW = Instant.now();
 		Scanner sc = new Scanner(System.in);
-		for(int k =0; k < 24 ;k++ )
+		for(int k =0; k < 2 ;k++ )
 		{
 			
 			if (k % 2 == 0)
@@ -139,9 +140,9 @@ public class Main {
 			EventListHolder elh = EventListHolder.ref(true);
 			MyProcess p = new MyProcess(elh); 
 			p.startProcessing();
-		for(int i=0;i< 1000;i++)
+		for(int i=0;i< 100;i++)
 		{
-			
+			double energyAvailable = 8.0;
 			int timeForVehicle = i/Generation_rate;
 			CreateEvent ce = new CreateEvent(timeForVehicle);
 			Random rn = new Random(0);
@@ -155,15 +156,16 @@ public class Main {
 		//	 start =0 ;
 		//	System.out.println("the numbers were" + des + " " + start);
 			
-			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(start), listOfLocalPlaces.get(des),timeForVehicle );
+			Vehicle v = new Vehicle(velocity, listOfLocalPlaces.get(start), listOfLocalPlaces.get(des),timeForVehicle,energyAvailable );
 			
 			VehicleListHolder.getVehicleListHolder().listOfVehicles.add(v);
 			
 			VehicleBeginEvent ve = new VehicleBeginEvent(timeForVehicle, v);
 			
-			elh.addEvent(ce);
+			//elh.addEvent(ce);
 			elh.addEvent(ve);
-			System.out.println("adding cars");
+			System.out.println("adding cars with full energy capacity");
+			System.out.println("Vehicle Capacity"+v.getId()+":"+v.getCurrentRemainingEnergy());
 			
 		}
 		System.out.println("Enter to run next run");
@@ -171,28 +173,31 @@ public class Main {
 		}
 
 		
-		System.out.println("Going to draw graph");
+		//System.out.println("Going to draw graph");
 		/*final DrawGraph demo = new DrawGraph("Comparsion Sensor data input");
 	    demo.pack();
 	    RefineryUtilities.centerFrameOnScreen(demo);
 	     demo.setVisible(true);
 	     */
-	 	final DrawGraph2 demo2 = new DrawGraph2("Average delay");
+	 	/*final DrawGraph2 demo2 = new DrawGraph2("Average delay");
 	    demo2.pack();
 	    RefineryUtilities.centerFrameOnScreen(demo2);
 	    demo2.setVisible(true);
 	        
 		System.out.println("Waiting for user input for graphs");
-		sc.nextLine();
+		sc.nextLine();*/
 		
 		StopEvent stopEvent = new StopEvent(50000);
 		EventListHolder.getEventList().addEvent(stopEvent);
 		
 		System.out.println("Exited ");
 		sc.close();
-	//	EventListHolder.getEventList().addEvent(new DrawEvent(2));
-		System.out.println("The delay 1 is " + StatsHolder.getDelay1());
-		System.out.println("The delay 2 is " + StatsHolder.getDelay2());
+		EventListHolder.getEventList().addEvent(new DrawEvent(2));
+		//System.out.println("The delay 1 is " + StatsHolder.getDelay1());
+		//System.out.println("The delay 2 is " + StatsHolder.getDelay2());
+		
+		
+		
 		/*
 		CreateEvent ce2 = new CreateEvent(2);
 		timeForVehicle = 25;
